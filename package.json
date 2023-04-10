@@ -1,0 +1,33 @@
+{
+  "name": "loudquiz-backend",
+  "version": "1.0.0",
+  "description": "Api part of the loudQuiz-app",
+  "keywords": [],
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rikkaar/loudquiz-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rikkaar/loudquiz-backend/issues"
+  },
+  "homepage": ".",
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.0",
+    "pg": "^8.10.0",
+    "sequelize": "^6.31.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
