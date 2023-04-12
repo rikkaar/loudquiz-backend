@@ -33,3 +33,5 @@ npm-debug.log
 
 *.development
 *.production
+
+test.js

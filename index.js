@@ -6,6 +6,7 @@ const models = require('./models/models')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const fileUpload = require('express-fileupload')
+const ErrorHandler = require('./middleware/ErrorHandlingMiddleware')
 
 const router = require('./routes/index')
 
@@ -25,15 +26,15 @@ app.get('/', (req, res) => {
     res.send('hello world')
 })
 
-// app.use('/api', router)
-// app.use(ErrorHandler)
+app.use('/api', router)
+app.use(ErrorHandler)
 
 
 const start = async () => {
     try {
         await sequelize.authenticate()
-        await sequelize.sync({ force: true })
-        // await sequelize.sync()
+        // await sequelize.sync({force: true})
+        await sequelize.sync()
 
         app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
     } catch (e) {

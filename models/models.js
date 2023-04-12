@@ -1,23 +1,29 @@
 const sequelize = require('../database')
 const {DataTypes} = require('sequelize')
+const {normal} = require("../utils/complicityConsts");
 
 const User = sequelize.define('user',{
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    name: {type: DataTypes.STRING, allowNull:false}
 })
 
 const Room = sequelize.define('room', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    access_code: {type: DataTypes.STRING, allowNull: false},
+    access_code: {type: DataTypes.SMALLINT, allowNull: false},
     socket: {type: DataTypes.STRING, allowNull: false},
     mode: {type: DataTypes.STRING, allowNull: false},
     order: {type: DataTypes.ARRAY(DataTypes.INTEGER), allowNull: false},
+    complicity: {type: DataTypes.SMALLINT, allowNull: false, defaultValue: normal},
+    experimental: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false},
+    loud_quiz: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true}
 })
 
 const Questions = sequelize.define('questions', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    complicity: {type: DataTypes.INTEGER, allowNull: false},
+    complicity: {type: DataTypes.SMALLINT, allowNull: false},
     title: {type: DataTypes.STRING, allowNull: false},
-    answer: {type: DataTypes.STRING, allowNull: true}
+    answer: {type: DataTypes.STRING, allowNull: true},
+    loud_quiz: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false}
 })
 
 const Game = sequelize.define('game', {
@@ -44,20 +50,33 @@ Room.belongsTo(User, {
     foreignKey: 'host'
 })
 
-Room.hasMany(Game)
+Room.hasOne(User)
+User.belongsTo(Room)
+
+Room.hasMany(Game, {
+    onDelete: 'CASCADE',
+})
 Game.belongsTo(Room)
 
 Questions.hasMany(Game)
 Game.belongsTo(Questions)
 
-Game.hasMany(Answers)
+Game.hasMany(Answers, {
+    onDelete: 'CASCADE',
+})
 Answers.belongsTo(Game)
 
-User.hasMany(Answers)
+User.hasMany(Answers, {
+    onDelete: 'CASCADE',
+})
 Answers.belongsTo(User)
 
 
 module.exports = {
     User,
-    Room
+    Room,
+    Questions,
+    Game,
+    Answers,
+    Feedback,
 }
