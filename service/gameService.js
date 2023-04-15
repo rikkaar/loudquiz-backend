@@ -19,10 +19,7 @@ class GameService {
         const userList = await roomService.userList(game.dataValues.roomId)
         const answerList = await answerService.getAnswers(gameId)
         const answer = await questionService.get(game.dataValues.questionId)
-        console.log(answer.dataValues.answer)
-        console.log(userList.length)
-        console.log(answerList.length - 1)
-        if (userList.length - 1 === answerList.length) {
+        if (userList.length === answerList.length) {
             let status = true
             answerList.map(ans => {
                 if (answer.dataValues.answer !== ans.dataValues.answer) {

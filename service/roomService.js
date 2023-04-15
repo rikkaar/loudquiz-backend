@@ -8,6 +8,14 @@ class RoomService {
         return await Room.findOne({where: {id: roomId}})
     }
 
+    async getRoomBySocket(socket){
+        return await Room.findOne({where: {socket}})
+    }
+
+    async getRoomByCode(code) {
+        return await Room.findOne({where: {access_code: code}})
+    }
+
     async userList(roomId) {
         return await User.findAll({where: {roomId}})
     }
@@ -27,23 +35,21 @@ class RoomService {
         return await room.update({order})
     }
 
-    async createRoom(host, mode) {
+    async createRoom(host) {
         const access_code = await getAccessCode()
         const socket = uuid.v4()
         const order = [host]
-        return await Room.create({access_code, socket, mode, order, host})
+        return await Room.create({access_code, socket, order, host})
     }
 
-    async deleteRoom(roomId, userId) {
+    async deleteRoom(userId) {
         const room = await Room.findOne({
             where: {
                 host: userId,
-                id: roomId,
             }
         })
         if (!room) {
-            return ApiError.unauthorized("Пользователь не может удалить чужую комнату")
-
+            return ApiError.unauthorized("У вас нет активных комнат")
         }
         await room.destroy()
     }

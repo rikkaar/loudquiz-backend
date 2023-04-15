@@ -11,7 +11,6 @@ const Room = sequelize.define('room', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     access_code: {type: DataTypes.SMALLINT, allowNull: false},
     socket: {type: DataTypes.STRING, allowNull: false},
-    mode: {type: DataTypes.STRING, allowNull: false},
     order: {type: DataTypes.ARRAY(DataTypes.INTEGER), allowNull: false},
     complicity: {type: DataTypes.SMALLINT, allowNull: false, defaultValue: normal},
     experimental: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false},

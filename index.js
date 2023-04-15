@@ -7,12 +7,25 @@ const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const fileUpload = require('express-fileupload')
 const ErrorHandler = require('./middleware/ErrorHandlingMiddleware')
+const AuthMiddleware = require('./middleware/AuthMiddleware')
+
+const app = express()
+const { Server } = require("socket.io");
+
+const server = require('http').createServer(app)
+
+const io = require("socket.io")(server, {
+    cors: {
+        origin: "http://127.0.0.1:5173",
+        credentials: "true",
+    }});
+
 
 const router = require('./routes/index')
 
 const PORT = process.env.PORT || 5000
 
-const app = express()
+
 app.use(express.json())
 app.use(cors({
     credentials: true,
@@ -20,15 +33,33 @@ app.use(cors({
 }))
 app.use(cookieParser())
 
+
+// app.use(
+//     session({
+//         secret: process.env.COOKIE_SECRET,
+//         credentials: true,
+//         name: "sid",
+//         resave: false,
+//         saveUninitialized: false,
+//         cookie: {
+//             secure: process.env.ENVIRONMENT === "production" ? "true" : "auto",
+//             httpOnly: true,
+//             expires: 1000 * 60 * 60 * 24 * 7,
+//             sameSite: process.env.ENVIRONMENT === "production" ? "none" : "lax",
+//         },
+//     })
+// );
+
 app.use(express.static(path.resolve(__dirname, 'static')))
 app.use(fileUpload({}))
-app.get('/', (req, res) => {
-    res.send('hello world')
-})
-
 app.use('/api', router)
 app.use(ErrorHandler)
 
+// io.use((socket, next) => AuthMiddleware(socket.request, {}, next))
+io.on("connection", socket => {
+    console.log(socket.id)
+    // console.log(socket.request.user.name)
+})
 
 const start = async () => {
     try {
