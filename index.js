@@ -1,6 +1,7 @@
 require('dotenv').config({path: "./.env.development"})
 const path = require('path')
 const express = require('express')
+const http = require('http')
 const sequelize = require('./database')
 const models = require('./models/models')
 const cors = require('cors')
@@ -12,12 +13,13 @@ const AuthMiddleware = require('./middleware/AuthMiddleware')
 const app = express()
 const { Server } = require("socket.io");
 
-const server = require('http').createServer(app)
+const server = http.createServer(app)
 
 const io = require("socket.io")(server, {
     cors: {
         origin: "http://127.0.0.1:5173",
-        credentials: "true",
+        credentials: true,
+        methods: ["POST", "GET"]
     }});
 
 
@@ -67,7 +69,7 @@ const start = async () => {
         // await sequelize.sync({force: true})
         await sequelize.sync()
 
-        app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
+        server.listen(PORT, () => console.log(`Server started on port ${PORT}`))
     } catch (e) {
         console.log(e.message)
     }
