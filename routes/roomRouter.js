@@ -8,9 +8,9 @@ router.get('/getBySocket/:socket', AuthMiddleware, roomController.getRoomBySocke
 router.get('/getByCode/:code', AuthMiddleware, roomController.getRoomByCode)
 router.get('/create', AuthMiddleware, roomController.createRoom)
 router.delete('/', AuthMiddleware, roomController.deleteRoom)
-router.get('/:roomId/complicity/:complicity', roomController.setComplicity)
-router.get('/:roomId/experimental/:experimental', roomController.setExperimental)
-router.get('/:roomId/loud_quiz/:loud_quiz', roomController.setLoudQuiz)
+router.get('/:roomId/complicity/:complicity', AuthMiddleware, roomController.setComplicity)
+router.get('/:roomId/experimental/:experimental', AuthMiddleware, roomController.setExperimental)
+router.get('/:roomId/loud_quiz/:loud_quiz', AuthMiddleware, roomController.setLoudQuiz)
 
 
 module.exports = router

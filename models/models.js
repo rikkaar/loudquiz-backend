@@ -11,7 +11,7 @@ const Room = sequelize.define('room', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     access_code: {type: DataTypes.SMALLINT, allowNull: false},
     socket: {type: DataTypes.STRING, allowNull: false},
-    order: {type: DataTypes.ARRAY(DataTypes.INTEGER), allowNull: false},
+    order: {type: DataTypes.ARRAY(DataTypes.INTEGER), allowNull: false}, // Если роль Ведущего переходящая, то массив содержит всех пользователей, если нет, то только одного - ведущего
     complicity: {type: DataTypes.SMALLINT, allowNull: false, defaultValue: normal},
     experimental: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false},
     loud_quiz: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true}

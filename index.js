@@ -57,11 +57,17 @@ app.use(fileUpload({}))
 app.use('/api', router)
 app.use(ErrorHandler)
 
-// io.use((socket, next) => AuthMiddleware(socket.request, {}, next))
-io.on("connection", socket => {
-    console.log(socket.id)
-    // console.log(socket.request.user.name)
-})
+
+
+const registerRoomHandlers = require("./ioControllers/registerRoomHandlers");
+const registerUserHandlers = require("./ioControllers/registerUserHandlers");
+io.use((socket, next) => AuthMiddleware(socket.request, {}, next))
+const onConnection = (socket) => {
+    registerRoomHandlers(io, socket)
+    registerUserHandlers(io, socket)
+}
+
+io.on("connection", onConnection)
 
 const start = async () => {
     try {
