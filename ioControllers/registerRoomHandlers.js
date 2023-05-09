@@ -15,6 +15,10 @@ module.exports = (io, socket) => {
         // ...
     }
 
+    const sendSettings = () => {
+
+    }
+
     socket.on("room:connect", connect);
     socket.on("room:getUsers", getUsers);
     socket.on("room:join", join);

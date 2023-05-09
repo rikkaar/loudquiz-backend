@@ -9,18 +9,18 @@ const cookieParser = require('cookie-parser')
 const fileUpload = require('express-fileupload')
 const ErrorHandler = require('./middleware/ErrorHandlingMiddleware')
 const AuthMiddleware = require('./middleware/AuthMiddleware')
-
+const {instrument} = require('@socket.io/admin-ui')
 const app = express()
-const { Server } = require("socket.io");
+const {Server} = require("socket.io");
 
 const server = http.createServer(app)
 
 const io = require("socket.io")(server, {
     cors: {
-        origin: "http://127.0.0.1:5173",
+        origin: ["http://127.0.0.1:5173", "https://admin.socket.io"],
         credentials: true,
-        methods: ["POST", "GET"]
-    }});
+    }
+});
 
 
 const router = require('./routes/index')
@@ -31,7 +31,7 @@ const PORT = process.env.PORT || 5000
 app.use(express.json())
 app.use(cors({
     credentials: true,
-    origin: "http://127.0.0.1:5173"
+    origin: ["http://127.0.0.1:5173", "https://admin.socket.io"]
 }))
 app.use(cookieParser())
 
@@ -58,7 +58,6 @@ app.use('/api', router)
 app.use(ErrorHandler)
 
 
-
 const registerRoomHandlers = require("./ioControllers/registerRoomHandlers");
 const registerUserHandlers = require("./ioControllers/registerUserHandlers");
 io.use((socket, next) => AuthMiddleware(socket.request, {}, next))
@@ -80,5 +79,6 @@ const start = async () => {
         console.log(e.message)
     }
 }
-
+instrument(io, {auth: false})
 start()
+
